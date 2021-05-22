@@ -1,0 +1,139 @@
+{% extends 'layouts/main.html' %}
+{% block title %}New Show Listing{% endblock %}
+{% block content %}
+
+  <div class="form-wrapper">    
+      <h3 class="form-heading">List a new show for {{ venue.name }}</h3>
+      <div class="form-group">        
+          <label for="venue_id">Venue ID: </label>         
+            <small class="subtitle">
+              {{ venue.id }}
+            </small>             
+      </div>
+      <div class="form-group">
+          <div style="margin-bottom:5px;">           
+              <input class="form-control"
+              onkeyup=onKeyUp(event)
+              type="search"
+              name="search_term"
+              autofocus = true
+              id="search"
+              placeholder="Find an artist"
+              aria-label="Search">          
+          </div>        
+          <div >
+            <label id="label_artist_b" style="display:none;">Select artista</label>
+            <small id="label_artist_s" style="display:none;">select an artist by clicking on the name </small>
+            <div>
+              <label id="label_artist_id_name" style="display:none;">ID    Name </label>
+            </div>
+            <ul class="items" id="artists">    
+              
+            </ul>
+          </div>
+      </div>        
+                   
+      <form method="post" class="form" action="/venues/{{ venue.id }}/create_show">
+        <label for="artist_id">Artist ID</label>
+        <small class="subtitle"> You must search for an artist and select it in order to create the show </small>  
+        <div class="form-group">             
+            <div class="form-inline"> 
+              <div class="form-group">               
+                {{ form.artist_id(class_ = 'form-control', autofocus = false) }}
+              </div>
+              <div class="form-group">
+                <small class="subtitle form-control" id="artist_name">                     
+                </small>
+              </div>
+            </div>           
+        </div>         
+        <div class="form-group">
+            <label for="start_time">Start Time</label>
+            {{ form.start_time(class_ = 'form-control', placeholder='YYYY-MM-DD HH:MM', autofocus = true) }}
+        </div>
+        <input type="submit" value="Create Venue" class="btn btn-primary btn-lg btn-block">
+      </form>
+  </div>
+
+  <script>
+
+    let artist_list_select;
+    
+    function onKeyUp(event) {          
+    var keycode = event.keyCode;
+    if(keycode == '13'){
+      const search_value_1  = document.getElementById("search").value;    
+      if( search_value_1 === "" || search_value_1.length == 0 ) 
+        search_value=' ';
+      else
+        search_value=search_value_1;
+               
+      fetch('/venue/artists/' + search_value + '/search' ,{ 
+         method: 'POST'
+      })
+      .then(function (response) {
+            return response.json();
+      })
+      .then(function (jsonResponse) {          
+        console.log(jsonResponse);
+        //window.location.reload(true);
+          
+        const parent = document.getElementById("artists");                
+        while (parent.firstChild) {
+          parent.firstChild.remove()
+        }         
+          
+        document.getElementById('label_artist_b').style.display = 'inline';
+        document.getElementById('label_artist_s').style.display = 'inline';
+        document.getElementById('label_artist_id_name').style.display = 'inline';
+        for (let i = 0; i < jsonResponse.data.length; i++) {
+           
+          const liItem = document.createElement('LI');
+  
+          liItem.innerHTML = jsonResponse.data[i]['id'] + ' ' + jsonResponse.data[i]['name'];
+          liItem.id = jsonResponse.data[i]['id'];
+          document.getElementById('artists').appendChild(liItem); 
+        }          
+        document.getElementById("artist_id").value = '';
+        document.getElementById("artist_name").innerHTML = '';        
+        list_artists();                        
+        })
+        .catch(function (err) {  
+          document.getElementById("artist_id").value = '';
+          document.getElementById("artist_name").innerHTML = '';          
+          console.log('Error');			
+        
+        })
+      }
+    };
+    
+    function list_artists () {
+      artist_list_select = document.getElementById("artists").children;      
+      if(artist_list_select.length > 0){        
+        for (let i = 0; i <  artist_list_select.length; i++) {
+          const artist_select = artist_list_select[i];          
+          artist_select.ondblclick = function(e) {                       
+            id_artist_pa = document.getElementById("artist_id");
+            id_artist_pa.value = artist_select.id;
+            name_artist_pa = document.getElementById("artist_name");            
+            position_space =  artist_select.innerHTML.indexOf(' ');            
+            name_artist_pa.innerHTML = artist_select.innerHTML.substring(position_space,artist_select.innerHTML.length);          
+          };
+        }
+      }
+    };
+
+    artist_id_input = document.getElementById("artist_id");
+    artist_id_input.onfocus = function(e) {
+        console.log('onfocus');
+        artist_id_input.readOnly = true;
+    };
+
+    artist_id_input.onblur = function(e) {
+        console.log('onblur');
+        artist_id_input.readOnly = false;
+    };
+  
+  </script>
+  
+{% endblock %}

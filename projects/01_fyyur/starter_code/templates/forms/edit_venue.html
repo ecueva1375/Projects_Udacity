@@ -30,8 +30,8 @@
       <div class="form-group">
         <label for="genres">Genres</label>
         <small>Ctrl+Click to select multiple</small>
-        {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', autofocus = true) }}
-      </div>
+        {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', autofocus = true ) }}
+      </div> 
       <div class="form-group">
           <label for="facebook_link">Facebook Link</label>
           {{ form.facebook_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
@@ -49,7 +49,7 @@
 
         <div class="form-group">
              <label for="seeking_talent">Looking for Talent</label>
-             {{ form.seeking_talent(class_ = 'form-control', placeholder='Venue', autofocus = true) }}
+             {{ form.seeking_talent(class_ = 'form-control', placeholder='Venue', autofocus = true, checked="checked" if form.seeking_talent else "" ) }} 
         </div>
 
         <div class="form-group">
@@ -59,5 +59,5 @@
       
       <input type="submit" value="Edit Venue" class="btn btn-primary btn-lg btn-block">
     </form>
-  </div>
+  </div>  
 {% endblock %}
