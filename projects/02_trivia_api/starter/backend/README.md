@@ -81,19 +81,23 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 ## API Reference
 
 Getting Started
+
 Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, http://127.0.0.1:5000/, which is set as a proxy in the frontend configuration.
+
 Authentication: This version of the application does not require authentication or API keys.
+
 Error Handling
+
 Errors are returned as JSON objects in the following format:
 
-```js
+```
 {
     "success": False, 
     "error": 400,
     "message": "bad request"
 }
 ```
-```js
+```
 
 The API will return five error types when requests fail:
 
@@ -104,8 +108,9 @@ The API will return five error types when requests fail:
 500: Internal server error
 
 ```
-
+```
 Endpoints
+
 GET '/api/v1.0/categories'
 GET '/api/v1.0/questions?page=${integer}'
 GET '/api/v1.0/categories/${id}/questions'
@@ -113,7 +118,7 @@ POST '/api/v1.0/questions'
 POST '/api/v1.0/quizzes'
 DELETE '/api/v1.0/questions/{id}'
 
-Endpoints
+
 GET '/api/v1.0/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
@@ -239,6 +244,7 @@ DELETE '/api/v1.0/questions/${id}'
 }
 
 
+```
 
 ## Testing
 To run the tests, run
