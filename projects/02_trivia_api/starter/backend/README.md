@@ -86,11 +86,15 @@ Authentication: This version of the application does not require authentication 
 Error Handling
 Errors are returned as JSON objects in the following format:
 
+```js
 {
     "success": False, 
     "error": 400,
     "message": "bad request"
 }
+```
+```js
+
 The API will return five error types when requests fail:
 
 400: Bad request
@@ -98,6 +102,8 @@ The API will return five error types when requests fail:
 405: Method not allowed
 422: Not processable
 500: Internal server error
+
+```
 
 Endpoints
 GET '/api/v1.0/categories'
